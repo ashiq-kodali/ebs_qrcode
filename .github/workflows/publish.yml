@@ -20,6 +20,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # setup-dart wires up pub.dev's OIDC credentials from the `id-token`
+      # permission, so `dart pub publish` authenticates automatically with no
+      # browser. flutter-action alone does NOT do this.
+      - name: Set up Dart (pub.dev OIDC auth)
+        uses: dart-lang/setup-dart@v1
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
