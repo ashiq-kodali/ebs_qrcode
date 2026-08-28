@@ -1,0 +1,41 @@
+name: Publish to pub.dev
+
+# Publishes the package whenever you push a version tag such as `v0.1.1`.
+# Uses pub.dev's automated publishing (OIDC) — no tokens or secrets required.
+# You must first enable automated publishing for this package on pub.dev:
+#   https://pub.dev/packages/ebs_qrcode/admin
+# with repository `ashiq-kodali/ebs_qrcode` and tag pattern `v{{version}}`.
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'          # stable, e.g. v0.1.1
+      - 'v[0-9]+.[0-9]+.[0-9]+-*'        # pre-release, e.g. v0.2.0-beta.1
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # REQUIRED: lets GitHub mint the OIDC token pub.dev trusts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Publish (dry run)
+        run: dart pub publish --dry-run
+
+      - name: Publish to pub.dev
+        run: dart pub publish --force
