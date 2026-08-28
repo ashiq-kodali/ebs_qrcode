@@ -176,13 +176,13 @@ class _EbsQrScannerState extends State<EbsQrScanner>
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(2),
                           gradient: LinearGradient(colors: [
-                            _cfg.accentColor.withOpacity(0),
+                            _cfg.accentColor.withValues(alpha: 0),
                             _cfg.accentColor,
-                            _cfg.accentColor.withOpacity(0),
+                            _cfg.accentColor.withValues(alpha: 0),
                           ]),
                           boxShadow: [
                             BoxShadow(
-                                color: _cfg.accentColor.withOpacity(0.6),
+                                color: _cfg.accentColor.withValues(alpha: 0.6),
                                 blurRadius: 8),
                           ],
                         ),
@@ -203,7 +203,7 @@ class _EbsQrScannerState extends State<EbsQrScanner>
                 _cfg.instruction!,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: _cfg.foregroundColor.withOpacity(0.75),
+                    color: _cfg.foregroundColor.withValues(alpha: 0.75),
                     fontSize: 14),
               ),
             ),

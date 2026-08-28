@@ -25,9 +25,11 @@ class EbsTorchButton extends StatelessWidget {
           icon: on ? Icons.flash_on_rounded : Icons.flash_off_rounded,
           tooltip: 'Toggle flash',
           onTap: () => controller.toggleTorch(),
-          background: on ? accentColor : foregroundColor.withOpacity(0.14),
+          background:
+              on ? accentColor : foregroundColor.withValues(alpha: 0.14),
           iconColor: on ? Colors.black : foregroundColor,
-          borderColor: on ? accentColor : foregroundColor.withOpacity(0.30),
+          borderColor:
+              on ? accentColor : foregroundColor.withValues(alpha: 0.30),
         );
       },
     );
@@ -55,9 +57,9 @@ class EbsCircleButton extends StatelessWidget {
       icon: icon,
       tooltip: tooltip,
       onTap: onTap,
-      background: foregroundColor.withOpacity(0.14),
+      background: foregroundColor.withValues(alpha: 0.14),
       iconColor: foregroundColor,
-      borderColor: foregroundColor.withOpacity(0.30),
+      borderColor: foregroundColor.withValues(alpha: 0.30),
     );
   }
 }
@@ -80,9 +82,9 @@ class EbsPillButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: foregroundColor.withOpacity(0.14),
+      color: foregroundColor.withValues(alpha: 0.14),
       shape: StadiumBorder(
-        side: BorderSide(color: foregroundColor.withOpacity(0.30)),
+        side: BorderSide(color: foregroundColor.withValues(alpha: 0.30)),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(

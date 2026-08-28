@@ -1,3 +1,9 @@
+## 0.1.1
+
+- Replace deprecated `Color.withOpacity` with `Color.withValues(alpha:)` to
+  remove analyzer warnings and avoid precision loss (fixes static-analysis
+  lints on pub.dev).
+
 ## 0.1.0
 
 - Initial release.
