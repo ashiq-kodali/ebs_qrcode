@@ -1,0 +1,22 @@
+name: ebs_qrcode
+description: A customizable, cross-platform QR / barcode scanner widget for Flutter with a modern viewfinder, torch, camera flip, and scan-from-gallery.
+version: 0.1.0
+homepage: https://github.com/ebsorinfo
+publish_to: 'none'
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  mobile_scanner: ^7.0.0
+  image_picker: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
