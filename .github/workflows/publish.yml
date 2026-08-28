@@ -34,6 +34,12 @@ jobs:
       - name: Analyze
         run: flutter analyze
 
+      # subosito/flutter-action rewrites analysis_options.yaml during setup,
+      # which leaves the git tree dirty and makes `pub publish` warn/fail.
+      # Restore all tracked files to their committed state before publishing.
+      - name: Restore clean git state
+        run: git checkout -- .
+
       - name: Publish (dry run)
         run: dart pub publish --dry-run
 
