@@ -11,6 +11,7 @@ export 'src/ebs_branding_footer.dart';
 export 'src/ebs_qr_config.dart';
 export 'src/ebs_qr_scanner.dart';
 
-// Re-export the barcode format enum so consumers can restrict formats without
-// importing mobile_scanner directly.
-export 'package:mobile_scanner/mobile_scanner.dart' show BarcodeFormat;
+// Re-export the enums used in EbsQrConfig's public API so consumers don't need
+// to import mobile_scanner directly.
+export 'package:mobile_scanner/mobile_scanner.dart'
+    show BarcodeFormat, CameraFacing;
