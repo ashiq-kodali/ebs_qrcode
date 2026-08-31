@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-/// Attractive circular torch (flash) button that reflects the live torch state:
+/// Attractive circular flash (torch) button that reflects the live flash state:
 /// filled with the accent colour when on, translucent when off.
-class EbsTorchButton extends StatelessWidget {
+class EbsFlashButton extends StatelessWidget {
   final MobileScannerController controller;
   final Color accentColor;
   final Color foregroundColor;
   final IconData onIcon;
   final IconData offIcon;
 
-  const EbsTorchButton({
+  const EbsFlashButton({
     super.key,
     required this.controller,
     required this.accentColor,

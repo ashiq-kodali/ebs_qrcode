@@ -110,6 +110,30 @@ class _EbsQrScannerState extends State<EbsQrScanner>
     );
   }
 
+  /// The flash control: a custom widget (fed the live on/off state + toggle)
+  /// when [EbsQrConfig.flashButtonBuilder] is set, otherwise the built-in
+  /// [EbsFlashButton].
+  Widget _buildFlash() {
+    final builder = _cfg.flashButtonBuilder;
+    if (builder != null) {
+      return ValueListenableBuilder<MobileScannerState>(
+        valueListenable: _controller,
+        builder: (context, state, _) => builder(
+          context,
+          state.torchState == TorchState.on,
+          _controller.toggleTorch,
+        ),
+      );
+    }
+    return EbsFlashButton(
+      controller: _controller,
+      accentColor: _cfg.accentColor,
+      foregroundColor: _cfg.foregroundColor,
+      onIcon: _cfg.flashOnIcon,
+      offIcon: _cfg.flashOffIcon,
+    );
+  }
+
   @override
   void dispose() {
     _lineController.dispose();
@@ -216,32 +240,29 @@ class _EbsQrScannerState extends State<EbsQrScanner>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (_cfg.showTorch) ...[
-                  EbsTorchButton(
-                    controller: _controller,
-                    accentColor: _cfg.accentColor,
-                    foregroundColor: _cfg.foregroundColor,
-                    onIcon: _cfg.torchOnIcon,
-                    offIcon: _cfg.torchOffIcon,
-                  ),
+                if (_cfg.showFlash) ...[
+                  _buildFlash(),
                   const SizedBox(width: 16),
                 ],
                 if (_cfg.showGallery) ...[
-                  EbsPillButton(
-                    icon: _cfg.galleryIcon,
-                    label: _cfg.galleryLabel,
-                    onTap: _scanFromGallery,
-                    foregroundColor: _cfg.foregroundColor,
-                  ),
+                  _cfg.galleryButtonBuilder?.call(context, _scanFromGallery) ??
+                      EbsPillButton(
+                        icon: _cfg.galleryIcon,
+                        label: _cfg.galleryLabel,
+                        onTap: _scanFromGallery,
+                        foregroundColor: _cfg.foregroundColor,
+                      ),
                   const SizedBox(width: 16),
                 ],
                 if (_cfg.showFlip)
-                  EbsCircleButton(
-                    icon: _cfg.flipIcon,
-                    tooltip: 'Flip camera',
-                    onTap: () => _controller.switchCamera(),
-                    foregroundColor: _cfg.foregroundColor,
-                  ),
+                  _cfg.flipButtonBuilder
+                          ?.call(context, _controller.switchCamera) ??
+                      EbsCircleButton(
+                        icon: _cfg.flipIcon,
+                        tooltip: 'Flip camera',
+                        onTap: () => _controller.switchCamera(),
+                        foregroundColor: _cfg.foregroundColor,
+                      ),
               ],
             ),
           ),

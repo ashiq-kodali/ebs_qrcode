@@ -7,8 +7,14 @@
   (PNG/JPEG/WebP/…), a network URL (SVG or raster, auto-detected), or a custom
   widget, with adjustable size and optional colour tint. SVG support via
   `flutter_svg`.
-- Add customizable control icons to `EbsQrConfig`: `torchOnIcon`,
-  `torchOffIcon`, `galleryIcon`, `flipIcon`.
+- Add customizable control icons to `EbsQrConfig`: `flashOnIcon`,
+  `flashOffIcon`, `galleryIcon`, `flipIcon`.
+- Add full-widget overrides for the flash, gallery, and flip controls
+  (`flashButtonBuilder`, `galleryButtonBuilder`, `flipButtonBuilder`) — replace
+  the entire button while the scanner keeps wiring the original action.
+- **Breaking:** rename the "torch" API to "flash" — `showTorch` → `showFlash`.
+  (New in this release; `torchOnIcon`/`torchOffIcon` are named
+  `flashOnIcon`/`flashOffIcon`.)
 
 ## 0.1.1
 

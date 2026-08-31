@@ -1,6 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+/// Builds a custom flash (torch) button. [isOn] reflects the live flash state;
+/// call [toggle] to turn the flash on/off — the scanner keeps that behaviour,
+/// you only supply the widget.
+typedef EbsFlashButtonBuilder = Widget Function(
+  BuildContext context,
+  bool isOn,
+  VoidCallback toggle,
+);
+
+/// Builds a custom action button (gallery or camera flip). Call [onTap] to run
+/// the original action — the scanner keeps that behaviour, you only supply the
+/// widget.
+typedef EbsControlButtonBuilder = Widget Function(
+  BuildContext context,
+  VoidCallback onTap,
+);
+
 /// Visual + behavioural configuration for [EbsQrScanner].
 ///
 /// Every field has a sensible default, so `const EbsQrConfig()` gives a
@@ -42,18 +59,25 @@ class EbsQrConfig {
   final double cutOutCenterYFactor;
 
   /// Toggle individual controls.
-  final bool showTorch;
+  final bool showFlash;
   final bool showGallery;
   final bool showFlip;
   final bool showScanLine;
 
-  /// Control icons. Override to swap the flashlight, gallery, or camera-flip
-  /// glyphs for your own. [torchOnIcon] / [torchOffIcon] reflect the live
-  /// torch state.
-  final IconData torchOnIcon;
-  final IconData torchOffIcon;
+  /// Control icons. Override to swap the flash, gallery, or camera-flip glyphs
+  /// for your own. [flashOnIcon] / [flashOffIcon] reflect the live flash state.
+  /// Ignored for a control when its full-widget builder below is set.
+  final IconData flashOnIcon;
+  final IconData flashOffIcon;
   final IconData galleryIcon;
   final IconData flipIcon;
+
+  /// Full-widget overrides. When set, the entire button is replaced by your
+  /// widget while the scanner keeps wiring the original action (toggle flash /
+  /// open gallery / flip camera). Leave null to use the built-in buttons.
+  final EbsFlashButtonBuilder? flashButtonBuilder;
+  final EbsControlButtonBuilder? galleryButtonBuilder;
+  final EbsControlButtonBuilder? flipButtonBuilder;
 
   /// Control labels / messages.
   final String galleryLabel;
@@ -82,14 +106,17 @@ class EbsQrConfig {
     this.cutOutMaxSize = 300,
     this.cutOutRadius = 16,
     this.cutOutCenterYFactor = 0.42,
-    this.showTorch = true,
+    this.showFlash = true,
     this.showGallery = true,
     this.showFlip = true,
     this.showScanLine = true,
-    this.torchOnIcon = Icons.flash_on_rounded,
-    this.torchOffIcon = Icons.flash_off_rounded,
+    this.flashOnIcon = Icons.flash_on_rounded,
+    this.flashOffIcon = Icons.flash_off_rounded,
     this.galleryIcon = Icons.photo_library_outlined,
     this.flipIcon = Icons.flip_camera_ios_outlined,
+    this.flashButtonBuilder,
+    this.galleryButtonBuilder,
+    this.flipButtonBuilder,
     this.galleryLabel = 'Gallery',
     this.noCodeFoundMessage = 'No code found in the image',
     this.imageErrorMessage = 'Could not scan the selected image',
@@ -111,14 +138,17 @@ class EbsQrConfig {
     double? cutOutMaxSize,
     double? cutOutRadius,
     double? cutOutCenterYFactor,
-    bool? showTorch,
+    bool? showFlash,
     bool? showGallery,
     bool? showFlip,
     bool? showScanLine,
-    IconData? torchOnIcon,
-    IconData? torchOffIcon,
+    IconData? flashOnIcon,
+    IconData? flashOffIcon,
     IconData? galleryIcon,
     IconData? flipIcon,
+    EbsFlashButtonBuilder? flashButtonBuilder,
+    EbsControlButtonBuilder? galleryButtonBuilder,
+    EbsControlButtonBuilder? flipButtonBuilder,
     String? galleryLabel,
     String? noCodeFoundMessage,
     String? imageErrorMessage,
@@ -139,14 +169,17 @@ class EbsQrConfig {
       cutOutMaxSize: cutOutMaxSize ?? this.cutOutMaxSize,
       cutOutRadius: cutOutRadius ?? this.cutOutRadius,
       cutOutCenterYFactor: cutOutCenterYFactor ?? this.cutOutCenterYFactor,
-      showTorch: showTorch ?? this.showTorch,
+      showFlash: showFlash ?? this.showFlash,
       showGallery: showGallery ?? this.showGallery,
       showFlip: showFlip ?? this.showFlip,
       showScanLine: showScanLine ?? this.showScanLine,
-      torchOnIcon: torchOnIcon ?? this.torchOnIcon,
-      torchOffIcon: torchOffIcon ?? this.torchOffIcon,
+      flashOnIcon: flashOnIcon ?? this.flashOnIcon,
+      flashOffIcon: flashOffIcon ?? this.flashOffIcon,
       galleryIcon: galleryIcon ?? this.galleryIcon,
       flipIcon: flipIcon ?? this.flipIcon,
+      flashButtonBuilder: flashButtonBuilder ?? this.flashButtonBuilder,
+      galleryButtonBuilder: galleryButtonBuilder ?? this.galleryButtonBuilder,
+      flipButtonBuilder: flipButtonBuilder ?? this.flipButtonBuilder,
       galleryLabel: galleryLabel ?? this.galleryLabel,
       noCodeFoundMessage: noCodeFoundMessage ?? this.noCodeFoundMessage,
       imageErrorMessage: imageErrorMessage ?? this.imageErrorMessage,

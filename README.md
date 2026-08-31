@@ -96,16 +96,36 @@ EbsBrandAsset.custom(const FlutterLogo());
 
 SVG rendering uses [`flutter_svg`](https://pub.dev/packages/flutter_svg).
 
-## Custom control icons
+## Custom controls (flash / gallery / flip)
 
-Swap the flashlight, gallery, and camera-flip glyphs via `EbsQrConfig`:
+**Swap just the icon** — the quickest option:
 
 ```dart
 EbsQrConfig(
-  torchOnIcon: Icons.flashlight_on_rounded,
-  torchOffIcon: Icons.flashlight_off_rounded,
+  flashOnIcon: Icons.flashlight_on_rounded,
+  flashOffIcon: Icons.flashlight_off_rounded,
   galleryIcon: Icons.image_outlined,
   flipIcon: Icons.cameraswitch_outlined,
+);
+```
+
+**Replace the whole widget** — supply your own button; the scanner keeps wiring
+the action for you (toggle flash / open gallery / flip camera):
+
+```dart
+EbsQrConfig(
+  // Flash builder receives the live on/off state + a toggle callback.
+  flashButtonBuilder: (context, isOn, toggle) => IconButton.filled(
+    onPressed: toggle,
+    icon: Icon(isOn ? Icons.flash_on : Icons.flash_off),
+  ),
+  // Gallery / flip builders receive just the action callback.
+  galleryButtonBuilder: (context, onTap) =>
+      TextButton(onPressed: onTap, child: const Text('Upload')),
+  flipButtonBuilder: (context, onTap) => FloatingActionButton.small(
+    onPressed: onTap,
+    child: const Icon(Icons.cameraswitch),
+  ),
 );
 ```
 
@@ -113,9 +133,10 @@ EbsQrConfig(
 
 Colours (`accentColor`, `scrimColor`, `borderColor`, `backgroundColor`,
 `foregroundColor`), the cut-out (`cutOutSizeFactor`, min/max size, radius,
-vertical position), toggles (`showTorch`, `showGallery`, `showFlip`,
-`showScanLine`), control icons (`torchOnIcon`, `torchOffIcon`, `galleryIcon`,
-`flipIcon`), labels/messages, an optional `footer` widget (see
+vertical position), toggles (`showFlash`, `showGallery`, `showFlip`,
+`showScanLine`), control icons (`flashOnIcon`, `flashOffIcon`, `galleryIcon`,
+`flipIcon`), full-widget builders (`flashButtonBuilder`, `galleryButtonBuilder`,
+`flipButtonBuilder`), labels/messages, an optional `footer` widget (see
 `EbsBrandingFooter`), allowed `formats`, and the initial camera facing. Every
 field has a sensible default.
 

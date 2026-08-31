@@ -29,17 +29,24 @@ class _HomePageState extends State<HomePage> {
   Future<void> _scan() async {
     final code = await EbsQrScanner.scan(
       context,
-      config: const EbsQrConfig(
+      config: EbsQrConfig(
         title: 'Scan a code',
-        accentColor: Color(0xFF3BBCE5),
-        // Swap any control icon for your own.
+        accentColor: const Color(0xFF3BBCE5),
+        // Simplest customization — just swap the control icons.
         galleryIcon: Icons.image_outlined,
         flipIcon: Icons.cameraswitch_outlined,
-        torchOnIcon: Icons.flashlight_on_rounded,
-        torchOffIcon: Icons.flashlight_off_rounded,
+        flashOnIcon: Icons.flashlight_on_rounded,
+        flashOffIcon: Icons.flashlight_off_rounded,
+        // Full-widget override — replace the entire flip button while the
+        // scanner keeps wiring the flip action for you.
+        flipButtonBuilder: (context, onTap) => FloatingActionButton.small(
+          heroTag: 'flip',
+          onPressed: onTap,
+          child: const Icon(Icons.cameraswitch),
+        ),
         // Branding footer: your app logo + name on the left, and the default
         // "Powered by Ebsor Infosystem" on the right (override to re-brand).
-        footer: EbsBrandingFooter(
+        footer: const EbsBrandingFooter(
           // appLogo: EbsBrandAsset.asset('assets/logo/app_logo.svg'),
           appName: 'CodeBook',
         ),
