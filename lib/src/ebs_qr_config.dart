@@ -47,6 +47,14 @@ class EbsQrConfig {
   final bool showFlip;
   final bool showScanLine;
 
+  /// Control icons. Override to swap the flashlight, gallery, or camera-flip
+  /// glyphs for your own. [torchOnIcon] / [torchOffIcon] reflect the live
+  /// torch state.
+  final IconData torchOnIcon;
+  final IconData torchOffIcon;
+  final IconData galleryIcon;
+  final IconData flipIcon;
+
   /// Control labels / messages.
   final String galleryLabel;
   final String noCodeFoundMessage;
@@ -78,6 +86,10 @@ class EbsQrConfig {
     this.showGallery = true,
     this.showFlip = true,
     this.showScanLine = true,
+    this.torchOnIcon = Icons.flash_on_rounded,
+    this.torchOffIcon = Icons.flash_off_rounded,
+    this.galleryIcon = Icons.photo_library_outlined,
+    this.flipIcon = Icons.flip_camera_ios_outlined,
     this.galleryLabel = 'Gallery',
     this.noCodeFoundMessage = 'No code found in the image',
     this.imageErrorMessage = 'Could not scan the selected image',
@@ -103,6 +115,10 @@ class EbsQrConfig {
     bool? showGallery,
     bool? showFlip,
     bool? showScanLine,
+    IconData? torchOnIcon,
+    IconData? torchOffIcon,
+    IconData? galleryIcon,
+    IconData? flipIcon,
     String? galleryLabel,
     String? noCodeFoundMessage,
     String? imageErrorMessage,
@@ -127,6 +143,10 @@ class EbsQrConfig {
       showGallery: showGallery ?? this.showGallery,
       showFlip: showFlip ?? this.showFlip,
       showScanLine: showScanLine ?? this.showScanLine,
+      torchOnIcon: torchOnIcon ?? this.torchOnIcon,
+      torchOffIcon: torchOffIcon ?? this.torchOffIcon,
+      galleryIcon: galleryIcon ?? this.galleryIcon,
+      flipIcon: flipIcon ?? this.flipIcon,
       galleryLabel: galleryLabel ?? this.galleryLabel,
       noCodeFoundMessage: noCodeFoundMessage ?? this.noCodeFoundMessage,
       imageErrorMessage: imageErrorMessage ?? this.imageErrorMessage,

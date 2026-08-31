@@ -6,6 +6,8 @@
 /// fully themeable overlay.
 library;
 
+export 'src/ebs_brand_asset.dart';
+export 'src/ebs_branding_footer.dart';
 export 'src/ebs_qr_config.dart';
 export 'src/ebs_qr_scanner.dart';
 

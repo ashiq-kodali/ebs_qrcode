@@ -32,6 +32,17 @@ class _HomePageState extends State<HomePage> {
       config: const EbsQrConfig(
         title: 'Scan a code',
         accentColor: Color(0xFF3BBCE5),
+        // Swap any control icon for your own.
+        galleryIcon: Icons.image_outlined,
+        flipIcon: Icons.cameraswitch_outlined,
+        torchOnIcon: Icons.flashlight_on_rounded,
+        torchOffIcon: Icons.flashlight_off_rounded,
+        // Branding footer: your app logo + name on the left, and the default
+        // "Powered by Ebsor Infosystem" on the right (override to re-brand).
+        footer: EbsBrandingFooter(
+          // appLogo: EbsBrandAsset.asset('assets/logo/app_logo.svg'),
+          appName: 'CodeBook',
+        ),
       ),
     );
     setState(() => _result = code);

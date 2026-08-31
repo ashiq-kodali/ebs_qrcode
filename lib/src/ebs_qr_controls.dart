@@ -7,12 +7,16 @@ class EbsTorchButton extends StatelessWidget {
   final MobileScannerController controller;
   final Color accentColor;
   final Color foregroundColor;
+  final IconData onIcon;
+  final IconData offIcon;
 
   const EbsTorchButton({
     super.key,
     required this.controller,
     required this.accentColor,
     required this.foregroundColor,
+    this.onIcon = Icons.flash_on_rounded,
+    this.offIcon = Icons.flash_off_rounded,
   });
 
   @override
@@ -22,7 +26,7 @@ class EbsTorchButton extends StatelessWidget {
       builder: (context, state, _) {
         final on = state.torchState == TorchState.on;
         return _EbsRoundButton(
-          icon: on ? Icons.flash_on_rounded : Icons.flash_off_rounded,
+          icon: on ? onIcon : offIcon,
           tooltip: 'Toggle flash',
           onTap: () => controller.toggleTorch(),
           background:

@@ -221,12 +221,14 @@ class _EbsQrScannerState extends State<EbsQrScanner>
                     controller: _controller,
                     accentColor: _cfg.accentColor,
                     foregroundColor: _cfg.foregroundColor,
+                    onIcon: _cfg.torchOnIcon,
+                    offIcon: _cfg.torchOffIcon,
                   ),
                   const SizedBox(width: 16),
                 ],
                 if (_cfg.showGallery) ...[
                   EbsPillButton(
-                    icon: Icons.photo_library_outlined,
+                    icon: _cfg.galleryIcon,
                     label: _cfg.galleryLabel,
                     onTap: _scanFromGallery,
                     foregroundColor: _cfg.foregroundColor,
@@ -235,7 +237,7 @@ class _EbsQrScannerState extends State<EbsQrScanner>
                 ],
                 if (_cfg.showFlip)
                   EbsCircleButton(
-                    icon: Icons.flip_camera_ios_outlined,
+                    icon: _cfg.flipIcon,
                     tooltip: 'Flip camera',
                     onTap: () => _controller.switchCamera(),
                     foregroundColor: _cfg.foregroundColor,
