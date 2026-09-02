@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -65,10 +66,28 @@ class _EbsQrScannerState extends State<EbsQrScanner>
     if (_handled || !mounted) return;
     if (code == null || code.isEmpty) return;
     _handled = true;
+    _buzz();
     if (widget.onDetect != null) {
       widget.onDetect!(code);
     } else {
       Navigator.of(context).pop(code);
+    }
+  }
+
+  /// Plays the configured haptic on a successful detection.
+  void _buzz() {
+    if (!_cfg.enableHaptics) return;
+    switch (_cfg.hapticFeedback) {
+      case EbsHaptic.light:
+        HapticFeedback.lightImpact();
+      case EbsHaptic.medium:
+        HapticFeedback.mediumImpact();
+      case EbsHaptic.heavy:
+        HapticFeedback.heavyImpact();
+      case EbsHaptic.selection:
+        HapticFeedback.selectionClick();
+      case EbsHaptic.vibrate:
+        HapticFeedback.vibrate();
     }
   }
 

@@ -28,6 +28,7 @@ Drop a beautiful, full-screen scanner into your app in **one line** — then cus
 - 🖼️ **Scan from gallery** — decode a code from an existing image.
 - 🔦 **Flash, flip & gallery controls** — swap the icon *or* replace the whole widget while keeping the action wired.
 - 🏷️ **Branding footer** — app logo + name and a "Powered by …" line, with logos in **any format** (SVG / PNG / JPEG / network / custom widget).
+- 📳 **Haptic feedback** — a configurable buzz on each successful scan.
 - ⚡ **Lightweight & fast** — a thin, well-documented layer with sensible defaults.
 
 ## 📱 Platforms
@@ -154,6 +155,18 @@ EbsQrConfig(
 );
 ```
 
+## 📳 Haptics
+
+A short haptic fires on every successful scan (camera or gallery). Tune or turn
+it off:
+
+```dart
+EbsQrConfig(
+  enableHaptics: true,                 // default
+  hapticFeedback: EbsHaptic.medium,    // light / medium / heavy / selection / vibrate
+);
+```
+
 ## 🔧 Configuration reference (`EbsQrConfig`)
 
 | Group | Fields |
@@ -165,6 +178,7 @@ EbsQrConfig(
 | **Control icons** | `flashOnIcon`, `flashOffIcon`, `galleryIcon`, `flipIcon` |
 | **Control widgets** | `flashButtonBuilder`, `galleryButtonBuilder`, `flipButtonBuilder` |
 | **Branding** | `footer` (see `EbsBrandingFooter`) |
+| **Haptics** | `enableHaptics`, `hapticFeedback` (`EbsHaptic.light/medium/heavy/selection/vibrate`) |
 | **Scanning** | `formats`, `initialCameraFacing` |
 
 Every field has a sensible default — `const EbsQrConfig()` gives a polished scanner out of the box.
@@ -175,12 +189,16 @@ See a fully-customised scanner (theming, cut-out geometry, format restriction, r
 [`example/lib/fully_custom.dart`](https://github.com/ashiq-kodali/ebs_qrcode/blob/main/example/lib/fully_custom.dart), and a minimal one in
 [`example/lib/main.dart`](https://github.com/ashiq-kodali/ebs_qrcode/blob/main/example/lib/main.dart).
 
-## 🗺️ Roadmap
+## 🗺️ Roadmap (planned)
 
-- [ ] Haptic / sound feedback on detect
+These are **not yet implemented** — they're planned for future releases:
+
+- [ ] Sound (beep) feedback on detect
 - [ ] Pinch-to-zoom & tap-to-focus
 - [ ] Multi-code detection callback
 - [ ] Built-in result sheet with copy / share
+
+> ✅ **Haptic feedback on detect** shipped in `0.2.1`.
 
 Have an idea? [Open an issue](https://github.com/ashiq-kodali/ebs_qrcode/issues) 💬
 

@@ -1,5 +1,8 @@
 ## 0.2.1
 
+- Add haptic feedback on a successful scan (camera or gallery), configurable
+  via `enableHaptics` and `hapticFeedback` (`EbsHaptic.light/medium/heavy/
+  selection/vibrate`); on by default at `EbsHaptic.medium`.
 - Add a showcase screenshot, a `screenshots:` entry for pub.dev, and a fully
   revamped README (badges, feature highlights, configuration reference,
   roadmap, contributing guide, and author's note).

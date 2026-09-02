@@ -18,6 +18,10 @@ typedef EbsControlButtonBuilder = Widget Function(
   VoidCallback onTap,
 );
 
+/// Haptic intensity played on a successful detection (see
+/// [EbsQrConfig.hapticFeedback]).
+enum EbsHaptic { light, medium, heavy, selection, vibrate }
+
 /// Visual + behavioural configuration for [EbsQrScanner].
 ///
 /// Every field has a sensible default, so `const EbsQrConfig()` gives a
@@ -63,6 +67,13 @@ class EbsQrConfig {
   final bool showGallery;
   final bool showFlip;
   final bool showScanLine;
+
+  /// Fire a short haptic buzz when a code is detected (camera or gallery).
+  /// Uses [hapticFeedback] intensity below. Set to `false` to disable.
+  final bool enableHaptics;
+
+  /// The haptic played on a successful detection when [enableHaptics] is true.
+  final EbsHaptic hapticFeedback;
 
   /// Control icons. Override to swap the flash, gallery, or camera-flip glyphs
   /// for your own. [flashOnIcon] / [flashOffIcon] reflect the live flash state.
@@ -110,6 +121,8 @@ class EbsQrConfig {
     this.showGallery = true,
     this.showFlip = true,
     this.showScanLine = true,
+    this.enableHaptics = true,
+    this.hapticFeedback = EbsHaptic.medium,
     this.flashOnIcon = Icons.flash_on_rounded,
     this.flashOffIcon = Icons.flash_off_rounded,
     this.galleryIcon = Icons.photo_library_outlined,
@@ -142,6 +155,8 @@ class EbsQrConfig {
     bool? showGallery,
     bool? showFlip,
     bool? showScanLine,
+    bool? enableHaptics,
+    EbsHaptic? hapticFeedback,
     IconData? flashOnIcon,
     IconData? flashOffIcon,
     IconData? galleryIcon,
@@ -173,6 +188,8 @@ class EbsQrConfig {
       showGallery: showGallery ?? this.showGallery,
       showFlip: showFlip ?? this.showFlip,
       showScanLine: showScanLine ?? this.showScanLine,
+      enableHaptics: enableHaptics ?? this.enableHaptics,
+      hapticFeedback: hapticFeedback ?? this.hapticFeedback,
       flashOnIcon: flashOnIcon ?? this.flashOnIcon,
       flashOffIcon: flashOffIcon ?? this.flashOffIcon,
       galleryIcon: galleryIcon ?? this.galleryIcon,
