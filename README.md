@@ -1,57 +1,86 @@
-# ebs_qrcode
+<h1 align="center">ebs_qrcode</h1>
 
-A customizable, cross-platform **QR / barcode scanner** widget for Flutter with a
-modern viewfinder, an attractive torch (flash) button, camera flip, an animated
-scan line, and **scan-from-gallery**.
+<p align="center">
+  <b>A highly customisable, cross-platform QR &amp; barcode scanner widget for Flutter.</b><br/>
+  Modern viewfinder · flash · camera flip · scan-from-gallery · configurable branding footer.
+</p>
 
-Built on [`mobile_scanner`](https://pub.dev/packages/mobile_scanner) with
-[`image_picker`](https://pub.dev/packages/image_picker) for gallery scanning.
+<p align="center">
+  <a href="https://pub.dev/packages/ebs_qrcode"><img src="https://img.shields.io/pub/v/ebs_qrcode?logo=dart&color=0175C2" alt="pub version"></a>
+  <a href="https://pub.dev/packages/ebs_qrcode/score"><img src="https://img.shields.io/pub/points/ebs_qrcode?logo=dart&color=0175C2" alt="pub points"></a>
+  <a href="https://pub.dev/packages/ebs_qrcode/score"><img src="https://img.shields.io/pub/likes/ebs_qrcode?logo=dart&color=0175C2" alt="pub likes"></a>
+  <a href="https://github.com/ashiq-kodali/ebs_qrcode/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license: MIT"></a>
+  <a href="https://github.com/ashiq-kodali/ebs_qrcode/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome"></a>
+</p>
 
-## Platforms
+<p align="center">
+  <img src="https://raw.githubusercontent.com/ashiq-kodali/ebs_qrcode/main/doc/showcase.jpg" alt="ebs_qrcode showcase" width="100%"/>
+</p>
+
+---
+
+## ✨ Why ebs_qrcode?
+
+Drop a beautiful, full-screen scanner into your app in **one line** — then customise every pixel when you need to. Built on the battle-tested [`mobile_scanner`](https://pub.dev/packages/mobile_scanner), with a modern overlay, animated scan line, and a branding footer, all out of the box.
+
+- 📷 **QR & barcodes** — scan QR codes and 1D/2D barcodes (EAN, UPC, Code128, and more).
+- 🎨 **Highly customisable** — colours, cut-out size/shape/position, scan line, labels, and control icons.
+- 🖼️ **Scan from gallery** — decode a code from an existing image.
+- 🔦 **Flash, flip & gallery controls** — swap the icon *or* replace the whole widget while keeping the action wired.
+- 🏷️ **Branding footer** — app logo + name and a "Powered by …" line, with logos in **any format** (SVG / PNG / JPEG / network / custom widget).
+- ⚡ **Lightweight & fast** — a thin, well-documented layer with sensible defaults.
+
+## 📱 Platforms
 
 | Android | iOS | macOS | Web |
-|:------:|:---:|:-----:|:---:|
-|   ✅   | ✅  |  ✅   | ✅  |
+|:-------:|:---:|:-----:|:---:|
+|   ✅    | ✅  |  ✅   | ✅  |
 
-(Camera + gallery availability follows the underlying `mobile_scanner` /
-`image_picker` support for each platform.)
+> Camera + gallery availability follows the underlying `mobile_scanner` / `image_picker` support for each platform.
 
-## Install
+## 🚀 Getting started
+
+Add the dependency:
 
 ```yaml
 dependencies:
-  ebs_qrcode:
-    path: ../ebs_qrcode   # or a git/pub reference
+  ebs_qrcode: ^0.2.0
+```
+
+```bash
+flutter pub add ebs_qrcode
 ```
 
 ### Permissions
-- **iOS** `Info.plist`: `NSCameraUsageDescription` (and
-  `NSPhotoLibraryUsageDescription` for gallery scanning).
-- **Android**: the plugins declare the `CAMERA` permission via manifest merge;
-  `minSdkVersion 21+`.
 
-## Usage
+- **iOS** — add to `Info.plist`:
+  - `NSCameraUsageDescription` — "Used to scan QR codes and barcodes."
+  - `NSPhotoLibraryUsageDescription` — "Used to scan a code from a photo." *(gallery scanning)*
+- **Android** — the plugins declare the `CAMERA` permission via manifest merge; use `minSdkVersion 21+`.
+
+## ⚡ Quick start
 
 Push the scanner and await the decoded value:
 
 ```dart
+import 'package:ebs_qrcode/ebs_qrcode.dart';
+
 final code = await EbsQrScanner.scan(context);
 if (code != null) {
-  // use the scanned value
+  debugPrint('Scanned: $code');
 }
 ```
 
-Customize it:
+Customise it:
 
 ```dart
 final code = await EbsQrScanner.scan(
   context,
-  config: EbsQrConfig(
+  config: const EbsQrConfig(
     title: 'Scan to sign in',
     accentColor: Color(0xFF3BBCE5),
-    showFlip: false,
     formats: [BarcodeFormat.qrCode],
-    footer: MyBrandFooter(),
+    showFlip: false,
   ),
 );
 ```
@@ -65,27 +94,24 @@ EbsQrScanner(
 );
 ```
 
-## Branding footer
+## 🏷️ Branding footer
 
-Add a polished branding line — your **app logo + name** on the left and a
-**"Powered by …"** on the right — with `EbsBrandingFooter`. The powered-by side
-defaults to *Ebsor Infosystem* (with a bundled logo), since it rarely changes;
-the app side is what you usually customize per app.
+Add a polished branding line — your **app logo + name** on the left and a **"Powered by …"** on the right — with `EbsBrandingFooter`:
 
 ```dart
 EbsQrConfig(
   footer: EbsBrandingFooter(
     appLogo: EbsBrandAsset.asset('assets/logo/app_logo.svg'), // any format
     appName: 'CodeBook',
-    // Powered-by side kept as the Ebsor default. To re-brand:
+    // The "Powered by" side is a sensible default; override to re-brand:
     // companyName: 'Acme Inc',
     // companyLogo: EbsBrandAsset.asset('assets/acme.png'),
-    // showPoweredBy: false,   // or hide it entirely
+    // showPoweredBy: false, // …or hide it entirely
   ),
 );
 ```
 
-`EbsBrandAsset` renders a logo from **any** source, and you can tune its size:
+`EbsBrandAsset` renders a logo from **any** source, at **any** size:
 
 ```dart
 EbsBrandAsset.asset('assets/logo.svg', height: 20);   // auto-detects SVG/raster
@@ -94,9 +120,9 @@ EbsBrandAsset.networkAuto('https://example.com/logo.svg');
 EbsBrandAsset.custom(const FlutterLogo());
 ```
 
-SVG rendering uses [`flutter_svg`](https://pub.dev/packages/flutter_svg).
+> SVG rendering is powered by [`flutter_svg`](https://pub.dev/packages/flutter_svg).
 
-## Custom controls (flash / gallery / flip)
+## 🎛️ Custom controls (flash / gallery / flip)
 
 **Swap just the icon** — the quickest option:
 
@@ -109,8 +135,7 @@ EbsQrConfig(
 );
 ```
 
-**Replace the whole widget** — supply your own button; the scanner keeps wiring
-the action for you (toggle flash / open gallery / flip camera):
+**Replace the whole widget** — supply your own button; the scanner keeps wiring the action:
 
 ```dart
 EbsQrConfig(
@@ -129,17 +154,67 @@ EbsQrConfig(
 );
 ```
 
-## Configuration (`EbsQrConfig`)
+## 🔧 Configuration reference (`EbsQrConfig`)
 
-Colours (`accentColor`, `scrimColor`, `borderColor`, `backgroundColor`,
-`foregroundColor`), the cut-out (`cutOutSizeFactor`, min/max size, radius,
-vertical position), toggles (`showFlash`, `showGallery`, `showFlip`,
-`showScanLine`), control icons (`flashOnIcon`, `flashOffIcon`, `galleryIcon`,
-`flipIcon`), full-widget builders (`flashButtonBuilder`, `galleryButtonBuilder`,
-`flipButtonBuilder`), labels/messages, an optional `footer` widget (see
-`EbsBrandingFooter`), allowed `formats`, and the initial camera facing. Every
-field has a sensible default.
+| Group | Fields |
+|---|---|
+| **Text** | `title`, `instruction`, `galleryLabel`, `noCodeFoundMessage`, `imageErrorMessage` |
+| **Colours** | `accentColor`, `scrimColor`, `borderColor`, `backgroundColor`, `foregroundColor` |
+| **Cut-out** | `cutOutSizeFactor`, `cutOutMinSize`, `cutOutMaxSize`, `cutOutRadius`, `cutOutCenterYFactor` |
+| **Toggles** | `showFlash`, `showGallery`, `showFlip`, `showScanLine` |
+| **Control icons** | `flashOnIcon`, `flashOffIcon`, `galleryIcon`, `flipIcon` |
+| **Control widgets** | `flashButtonBuilder`, `galleryButtonBuilder`, `flipButtonBuilder` |
+| **Branding** | `footer` (see `EbsBrandingFooter`) |
+| **Scanning** | `formats`, `initialCameraFacing` |
 
-## License
+Every field has a sensible default — `const EbsQrConfig()` gives a polished scanner out of the box.
 
-MIT — see `LICENSE`.
+## 🧑‍💻 Full example
+
+See a fully-customised scanner (theming, cut-out geometry, format restriction, re-branded footer, and all three control builders) in
+[`example/lib/fully_custom.dart`](https://github.com/ashiq-kodali/ebs_qrcode/blob/main/example/lib/fully_custom.dart), and a minimal one in
+[`example/lib/main.dart`](https://github.com/ashiq-kodali/ebs_qrcode/blob/main/example/lib/main.dart).
+
+## 🗺️ Roadmap
+
+- [ ] Haptic / sound feedback on detect
+- [ ] Pinch-to-zoom & tap-to-focus
+- [ ] Multi-code detection callback
+- [ ] Built-in result sheet with copy / share
+
+Have an idea? [Open an issue](https://github.com/ashiq-kodali/ebs_qrcode/issues) 💬
+
+## 🤝 Contributing & collaboration
+
+Contributions of every size are welcome and appreciated — this package grows with its community.
+
+- 🐛 **Found a bug?** [Open an issue](https://github.com/ashiq-kodali/ebs_qrcode/issues) with steps to reproduce.
+- 💡 **Have an idea?** Start a discussion or open a feature-request issue.
+- 🔧 **Want to code?** Fork the repo, create a branch, and send a PR — see below.
+- ⭐ **Like it?** A [pub.dev like](https://pub.dev/packages/ebs_qrcode) and a GitHub star help others find it.
+
+```bash
+git clone https://github.com/ashiq-kodali/ebs_qrcode.git
+cd ebs_qrcode
+flutter pub get
+flutter analyze && dart format --set-exit-if-changed .
+```
+
+Please keep PRs focused, run the analyzer/formatter, and update the `CHANGELOG.md`.
+Looking for a maintainer or co-author? **I'm actively open to collaboration** — reach out below. 🙌
+
+## 👋 Author's note
+
+Hi, I'm **Ashiq Kodali** — I built `ebs_qrcode` while working on real production apps at **Ebsor Infosystem**, because every project seemed to re-implement the same scanner UI from scratch. The goal here is a scanner that looks great by default, yet bends to *your* brand without fighting the framework.
+
+If this package saved you time, I'd love to hear about it — and if you'd like to help shape where it goes next, let's build it together.
+
+- 📧 Email: [itzmeask@gmail.com](mailto:itzmeask@gmail.com)
+- 🐙 GitHub: [@ashiq-kodali](https://github.com/ashiq-kodali)
+- 🏢 Ebsor Infosystem
+
+## 📄 License
+
+Released under the [MIT License](LICENSE) — free for personal and commercial use.
+
+<p align="center"><sub>Made with 💙 for the Flutter community by Ebsor Infosystem.</sub></p>

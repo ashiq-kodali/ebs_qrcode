@@ -15,6 +15,10 @@
 - **Breaking:** rename the "torch" API to "flash" — `showTorch` → `showFlash`.
   (New in this release; `torchOnIcon`/`torchOffIcon` are named
   `flashOnIcon`/`flashOffIcon`.)
+- Re-export `CameraFacing` so `initialCameraFacing` can be set without importing
+  `mobile_scanner` directly.
+- Add a showcase screenshot, a `screenshots:` entry for pub.dev, and a fully
+  revamped README.
 
 ## 0.1.1
 
