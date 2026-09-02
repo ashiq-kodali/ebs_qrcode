@@ -75,6 +75,25 @@ class EbsQrConfig {
   /// The haptic played on a successful detection when [enableHaptics] is true.
   final EbsHaptic hapticFeedback;
 
+  /// Enable pinch-to-zoom on the camera preview.
+  final bool enableZoom;
+
+  /// How strongly a pinch gesture maps to zoom (higher = faster zoom).
+  final double zoomSensitivity;
+
+  /// Show a built-in result sheet (value + copy/share) on detection instead of
+  /// returning immediately. The result is delivered when the user taps
+  /// [useResultLabel]; "scan again" dismisses it and resumes scanning.
+  final bool showResultSheet;
+
+  /// Result-sheet labels.
+  final String resultSheetTitle;
+  final String copyLabel;
+  final String shareLabel;
+  final String useResultLabel;
+  final String scanAgainLabel;
+  final String copiedMessage;
+
   /// Control icons. Override to swap the flash, gallery, or camera-flip glyphs
   /// for your own. [flashOnIcon] / [flashOffIcon] reflect the live flash state.
   /// Ignored for a control when its full-widget builder below is set.
@@ -123,6 +142,15 @@ class EbsQrConfig {
     this.showScanLine = true,
     this.enableHaptics = true,
     this.hapticFeedback = EbsHaptic.medium,
+    this.enableZoom = true,
+    this.zoomSensitivity = 1.0,
+    this.showResultSheet = false,
+    this.resultSheetTitle = 'Scan result',
+    this.copyLabel = 'Copy',
+    this.shareLabel = 'Share',
+    this.useResultLabel = 'Use',
+    this.scanAgainLabel = 'Scan again',
+    this.copiedMessage = 'Copied to clipboard',
     this.flashOnIcon = Icons.flash_on_rounded,
     this.flashOffIcon = Icons.flash_off_rounded,
     this.galleryIcon = Icons.photo_library_outlined,
@@ -157,6 +185,15 @@ class EbsQrConfig {
     bool? showScanLine,
     bool? enableHaptics,
     EbsHaptic? hapticFeedback,
+    bool? enableZoom,
+    double? zoomSensitivity,
+    bool? showResultSheet,
+    String? resultSheetTitle,
+    String? copyLabel,
+    String? shareLabel,
+    String? useResultLabel,
+    String? scanAgainLabel,
+    String? copiedMessage,
     IconData? flashOnIcon,
     IconData? flashOffIcon,
     IconData? galleryIcon,
@@ -190,6 +227,15 @@ class EbsQrConfig {
       showScanLine: showScanLine ?? this.showScanLine,
       enableHaptics: enableHaptics ?? this.enableHaptics,
       hapticFeedback: hapticFeedback ?? this.hapticFeedback,
+      enableZoom: enableZoom ?? this.enableZoom,
+      zoomSensitivity: zoomSensitivity ?? this.zoomSensitivity,
+      showResultSheet: showResultSheet ?? this.showResultSheet,
+      resultSheetTitle: resultSheetTitle ?? this.resultSheetTitle,
+      copyLabel: copyLabel ?? this.copyLabel,
+      shareLabel: shareLabel ?? this.shareLabel,
+      useResultLabel: useResultLabel ?? this.useResultLabel,
+      scanAgainLabel: scanAgainLabel ?? this.scanAgainLabel,
+      copiedMessage: copiedMessage ?? this.copiedMessage,
       flashOnIcon: flashOnIcon ?? this.flashOnIcon,
       flashOffIcon: flashOffIcon ?? this.flashOffIcon,
       galleryIcon: galleryIcon ?? this.galleryIcon,

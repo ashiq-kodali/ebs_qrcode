@@ -24,10 +24,21 @@ class EbsQrScanner extends StatefulWidget {
   /// If null, the scanner pops with the decoded value (via [Navigator.pop]).
   final ValueChanged<String>? onDetect;
 
+  /// If provided, called with **all** non-empty codes found in a single frame,
+  /// enabling multi-code scanning. When set, it takes over from [onDetect] /
+  /// auto-pop and the scanner keeps running so you control the flow.
+  final ValueChanged<List<String>>? onMultiDetect;
+
+  /// If provided, a "Share" action appears in the built-in result sheet
+  /// (see [EbsQrConfig.showResultSheet]); wire it to your own share plugin.
+  final ValueChanged<String>? onShareResult;
+
   const EbsQrScanner({
     super.key,
     this.config = const EbsQrConfig(),
     this.onDetect,
+    this.onMultiDetect,
+    this.onShareResult,
   });
 
   /// Pushes a full-screen scanner and resolves to the first decoded value,
@@ -59,14 +70,29 @@ class _EbsQrScannerState extends State<EbsQrScanner>
   )..repeat(reverse: true);
 
   bool _handled = false;
+  bool _reset = false;
+  double _zoom = 0.0;
+  double _zoomStart = 0.0;
 
   EbsQrConfig get _cfg => widget.config;
 
-  void _finish(String? code) {
+  /// Handles a single decoded value: haptic, then either the result sheet or
+  /// direct delivery. Guarded so it only fires once.
+  void _handleCode(String? code) {
     if (_handled || !mounted) return;
     if (code == null || code.isEmpty) return;
     _handled = true;
     _buzz();
+    if (_cfg.showResultSheet) {
+      _showResultSheet(code);
+    } else {
+      _deliver(code);
+    }
+  }
+
+  /// Delivers the value to [onDetect], or pops the route with it.
+  void _deliver(String code) {
+    if (!mounted) return;
     if (widget.onDetect != null) {
       widget.onDetect!(code);
     } else {
@@ -91,14 +117,105 @@ class _EbsQrScannerState extends State<EbsQrScanner>
     }
   }
 
+  /// Maps a pinch gesture to the camera zoom (0.0–1.0).
+  void _onZoom(ScaleUpdateDetails details) {
+    final next =
+        (_zoomStart + (details.scale - 1.0) * _cfg.zoomSensitivity).clamp(
+      0.0,
+      1.0,
+    );
+    if ((next - _zoom).abs() < 0.005) return;
+    _zoom = next;
+    _controller.setZoomScale(_zoom);
+  }
+
   void _onDetect(BarcodeCapture capture) {
     if (_handled) return;
-    for (final barcode in capture.barcodes) {
-      final value = barcode.rawValue;
-      if (value != null && value.isNotEmpty) {
-        _finish(value);
-        return;
-      }
+    final values = <String>[
+      for (final b in capture.barcodes)
+        if (b.rawValue != null && b.rawValue!.isNotEmpty) b.rawValue!,
+    ];
+    if (values.isEmpty) return;
+
+    // Multi-code mode: report every code and keep scanning.
+    if (widget.onMultiDetect != null) {
+      _buzz();
+      widget.onMultiDetect!(values);
+      return;
+    }
+    _handleCode(values.first);
+  }
+
+  /// Shows the built-in result sheet with copy / share / use / scan-again.
+  Future<void> _showResultSheet(String code) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(_cfg.resultSheetTitle,
+                    style: Theme.of(sheetContext).textTheme.titleMedium),
+                const SizedBox(height: 12),
+                SelectableText(code,
+                    style: Theme.of(sheetContext).textTheme.bodyLarge),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.copy_rounded, size: 18),
+                        label: Text(_cfg.copyLabel),
+                        onPressed: () async {
+                          await Clipboard.setData(ClipboardData(text: code));
+                          _snack(_cfg.copiedMessage);
+                        },
+                      ),
+                    ),
+                    if (widget.onShareResult != null) ...[
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          icon: const Icon(Icons.ios_share_rounded, size: 18),
+                          label: Text(_cfg.shareLabel),
+                          onPressed: () => widget.onShareResult!(code),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: 10),
+                FilledButton(
+                  onPressed: () => Navigator.of(sheetContext).pop(),
+                  child: Text(_cfg.useResultLabel),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _reset = true;
+                    Navigator.of(sheetContext).pop();
+                  },
+                  child: Text(_cfg.scanAgainLabel),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (!mounted) return;
+    if (_reset) {
+      // User chose "scan again": resume scanning.
+      _reset = false;
+      _handled = false;
+    } else {
+      _deliver(code);
     }
   }
 
@@ -113,7 +230,7 @@ class _EbsQrScannerState extends State<EbsQrScanner>
           : null;
       if (!mounted) return;
       if (code != null && code.isNotEmpty) {
-        _finish(code);
+        _handleCode(code);
       } else {
         _snack(_cfg.noCodeFoundMessage);
       }
@@ -186,7 +303,14 @@ class _EbsQrScannerState extends State<EbsQrScanner>
       body: Stack(
         children: [
           Positioned.fill(
-            child: MobileScanner(controller: _controller, onDetect: _onDetect),
+            child: _cfg.enableZoom
+                ? GestureDetector(
+                    onScaleStart: (_) => _zoomStart = _zoom,
+                    onScaleUpdate: _onZoom,
+                    child: MobileScanner(
+                        controller: _controller, onDetect: _onDetect),
+                  )
+                : MobileScanner(controller: _controller, onDetect: _onDetect),
           ),
 
           // Scrim + viewfinder cut-out with corner accents.

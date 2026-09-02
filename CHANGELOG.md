@@ -3,6 +3,13 @@
 - Add haptic feedback on a successful scan (camera or gallery), configurable
   via `enableHaptics` and `hapticFeedback` (`EbsHaptic.light/medium/heavy/
   selection/vibrate`); on by default at `EbsHaptic.medium`.
+- Add pinch-to-zoom (`enableZoom`, `zoomSensitivity`; on by default).
+- Add multi-code detection via the `onMultiDetect` callback (reports every code
+  in a frame and keeps scanning).
+- Add an optional built-in result sheet (`showResultSheet`) with copy /
+  scan-again, and share via the `onShareResult` callback; fully labelled
+  (`resultSheetTitle`, `copyLabel`, `shareLabel`, `useResultLabel`,
+  `scanAgainLabel`, `copiedMessage`).
 - Add a showcase screenshot, a `screenshots:` entry for pub.dev, and a fully
   revamped README (badges, feature highlights, configuration reference,
   roadmap, contributing guide, and author's note).

@@ -29,6 +29,9 @@ Drop a beautiful, full-screen scanner into your app in **one line** — then cus
 - 🔦 **Flash, flip & gallery controls** — swap the icon *or* replace the whole widget while keeping the action wired.
 - 🏷️ **Branding footer** — app logo + name and a "Powered by …" line, with logos in **any format** (SVG / PNG / JPEG / network / custom widget).
 - 📳 **Haptic feedback** — a configurable buzz on each successful scan.
+- 🔍 **Pinch-to-zoom** — zoom the camera preview with a pinch gesture.
+- 🔢 **Multi-code detection** — get every code in a frame via `onMultiDetect`.
+- 🧾 **Built-in result sheet** — optional sheet with copy / share / scan-again.
 - ⚡ **Lightweight & fast** — a thin, well-documented layer with sensible defaults.
 
 ## 📱 Platforms
@@ -167,6 +170,43 @@ EbsQrConfig(
 );
 ```
 
+## 🔍 Pinch-to-zoom
+
+Enabled by default — pinch the preview to zoom. Tune or disable it:
+
+```dart
+EbsQrConfig(
+  enableZoom: true,        // default
+  zoomSensitivity: 1.0,    // higher = faster zoom
+);
+```
+
+## 🔢 Multi-code detection
+
+Get **every** code found in a frame (the scanner keeps running so you drive the
+flow):
+
+```dart
+EbsQrScanner(
+  onMultiDetect: (codes) => debugPrint('Found ${codes.length}: $codes'),
+);
+```
+
+## 🧾 Built-in result sheet
+
+Show a sheet with the value + **Copy** / **Scan again** (and **Share** when you
+provide `onShareResult`) instead of returning immediately:
+
+```dart
+EbsQrScanner(
+  config: const EbsQrConfig(showResultSheet: true),
+  onShareResult: (code) => Share.share(code), // optional; your share plugin
+);
+```
+
+Copy uses the built-in clipboard — no extra dependency. Share is delegated to
+your own plugin via `onShareResult`, so the package stays dependency-light.
+
 ## 🔧 Configuration reference (`EbsQrConfig`)
 
 | Group | Fields |
@@ -179,7 +219,12 @@ EbsQrConfig(
 | **Control widgets** | `flashButtonBuilder`, `galleryButtonBuilder`, `flipButtonBuilder` |
 | **Branding** | `footer` (see `EbsBrandingFooter`) |
 | **Haptics** | `enableHaptics`, `hapticFeedback` (`EbsHaptic.light/medium/heavy/selection/vibrate`) |
+| **Zoom** | `enableZoom`, `zoomSensitivity` |
+| **Result sheet** | `showResultSheet`, `resultSheetTitle`, `copyLabel`, `shareLabel`, `useResultLabel`, `scanAgainLabel`, `copiedMessage` |
 | **Scanning** | `formats`, `initialCameraFacing` |
+
+Callbacks live on the `EbsQrScanner` widget: `onDetect` (single),
+`onMultiDetect` (all codes in a frame), and `onShareResult` (result-sheet share).
 
 Every field has a sensible default — `const EbsQrConfig()` gives a polished scanner out of the box.
 
@@ -191,14 +236,13 @@ See a fully-customised scanner (theming, cut-out geometry, format restriction, r
 
 ## 🗺️ Roadmap (planned)
 
-These are **not yet implemented** — they're planned for future releases:
+These are **not yet implemented** — planned for future releases:
 
-- [ ] Sound (beep) feedback on detect
-- [ ] Pinch-to-zoom & tap-to-focus
-- [ ] Multi-code detection callback
-- [ ] Built-in result sheet with copy / share
+- [ ] Sound (beep) feedback on detect *(needs an audio dependency)*
+- [ ] Tap-to-focus *(pending an upstream `mobile_scanner` focus API)*
 
-> ✅ **Haptic feedback on detect** shipped in `0.2.1`.
+**Recently shipped (0.2.1):** ✅ haptic feedback · ✅ pinch-to-zoom · ✅ multi-code
+detection · ✅ built-in result sheet (copy / share / scan-again).
 
 Have an idea? [Open an issue](https://github.com/ashiq-kodali/ebs_qrcode/issues) 💬
 
