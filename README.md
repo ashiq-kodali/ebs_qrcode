@@ -241,7 +241,7 @@ These are **not yet implemented** — planned for future releases:
 - [ ] Sound (beep) feedback on detect *(needs an audio dependency)*
 - [ ] Tap-to-focus *(pending an upstream `mobile_scanner` focus API)*
 
-**Recently shipped (0.2.1):** ✅ haptic feedback · ✅ pinch-to-zoom · ✅ multi-code
+**Recently shipped (0.2.2):** ✅ haptic feedback · ✅ pinch-to-zoom · ✅ multi-code
 detection · ✅ built-in result sheet (copy / share / scan-again).
 
 Have an idea? [Open an issue](https://github.com/ashiq-kodali/ebs_qrcode/issues) 💬

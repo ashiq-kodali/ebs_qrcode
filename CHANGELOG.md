@@ -1,4 +1,4 @@
-## 0.2.1
+## 0.2.2
 
 - Add haptic feedback on a successful scan (camera or gallery), configurable
   via `enableHaptics` and `hapticFeedback` (`EbsHaptic.light/medium/heavy/
@@ -10,6 +10,9 @@
   scan-again, and share via the `onShareResult` callback; fully labelled
   (`resultSheetTitle`, `copyLabel`, `shareLabel`, `useResultLabel`,
   `scanAgainLabel`, `copiedMessage`).
+
+## 0.2.1
+
 - Add a showcase screenshot, a `screenshots:` entry for pub.dev, and a fully
   revamped README (badges, feature highlights, configuration reference,
   roadmap, contributing guide, and author's note).
