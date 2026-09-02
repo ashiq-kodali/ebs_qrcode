@@ -1,3 +1,9 @@
+## 0.2.1
+
+- Add a showcase screenshot, a `screenshots:` entry for pub.dev, and a fully
+  revamped README (badges, feature highlights, configuration reference,
+  roadmap, contributing guide, and author's note).
+
 ## 0.2.0
 
 - Add `EbsBrandingFooter` — a built-in branding line with an app logo + name on
@@ -17,8 +23,6 @@
   `flashOnIcon`/`flashOffIcon`.)
 - Re-export `CameraFacing` so `initialCameraFacing` can be set without importing
   `mobile_scanner` directly.
-- Add a showcase screenshot, a `screenshots:` entry for pub.dev, and a fully
-  revamped README.
 
 ## 0.1.1
 
